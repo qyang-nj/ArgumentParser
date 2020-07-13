@@ -1,9 +1,9 @@
 # ArgumentParser
 If you have read the Chapter 14 of Uncle Bob's Clean Code, you probably will be interested in this repo.
 
-- To read Uncle Bob's solution with syntax highlight, check here.
+- To read Uncle Bob's solution with syntax highlight, check [here](https://github.com/qyang-nj/ArgumentParser/tree/master/src/main/java/solution/unclebob).
 - To execute his solution against tests, run `./gradlew test -DargsClass=solution.unclebob.Args`.
-- If you can't resist to implement your own solution, follow this. 
+- If you can't resist to implement your own solution, follow below section. 
 
 ### How do I implement and test a solution?
 Although you should practice TDD on your own, this repo provides decent amount of tests to valid the final program.
