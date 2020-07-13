@@ -167,4 +167,21 @@ public class ArgsTest {
         Args arg = newInstance("s[*]", new String[]{"-s", "item1", "item2"});
         assertArrayEquals(arg.getStringArray('s'), new String[]{"item1", "item2"});
     }
+
+    @Test()
+    public void testDuplicateValue() throws ArgsException {
+        Args arg = newInstance("i#", new String[]{"-i", "12", "-i", "13"});
+        assertEquals(arg.getInt('i'), 12);
+    }
+
+    @Test()
+    public void testDuplicateArgs() throws ArgsException {
+        Args arg = newInstance("i#,i#", new String[]{"-i", "12"});
+        assertEquals(arg.getInt('i'), 12);
+    }
+
+    @Test(expected = ArgsException.class)
+    public void testMalformedFormat() throws ArgsException {
+        newInstance("i#i#", new String[]{"-i", "12"});
+    }
 }
