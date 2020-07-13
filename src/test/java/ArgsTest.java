@@ -49,6 +49,13 @@ public class ArgsTest {
     }
 
     @Test
+    public void testSingleArg_Boolean_whenUseDefaultValue() throws ArgsException {
+        Args arg = newInstance("b", new String[]{"-"});
+        // Uncle Bob's implement uses `Boolean.parseBoolean`, which parses non "true" string to false.
+        assertFalse(arg.getBoolean('b'));
+    }
+
+    @Test
     public void testSingleArg_Boolean_whenRetrieveTwice() throws ArgsException {
         Args arg = newInstance("b", new String[]{"-b", "true"});
         assertTrue(arg.getBoolean('b'));
@@ -59,6 +66,12 @@ public class ArgsTest {
     public void testSingleArg_Integer() throws ArgsException {
         Args arg = newInstance("i#", new String[]{"-i", "12"});
         assertEquals(arg.getInt('i'), 12);
+    }
+
+    @Test
+    public void testSingleArg_Integer_whenUseDefaultValue() throws ArgsException {
+        Args arg = newInstance("i#", new String[]{"-"});
+        assertEquals(arg.getInt('i'), 0);
     }
 
     @Test(expected = ArgsException.class)
@@ -134,9 +147,28 @@ public class ArgsTest {
         newInstance("b,i#,s*", new String[]{"-bis", "true", "12"});
     }
 
-    @Test(expected = ArgsException.class)
+    @Test
     public void testMultiArgs_whenStringArgIsMissing() throws ArgsException {
-        newInstance("b,i#", new String[]{"-bis", "true", "12", "string"});
+        Args arg = newInstance("b,i#,s*", new String[]{"-bi", "true", "12", "string"});
+        assertTrue(arg.getBoolean('b'));
+        assertEquals(arg.getInt('i'), 12);
+        assertEquals(arg.getString('s'), "");
+    }
+
+    @Test
+    public void testMultiArgs_whenMoreValuesThanArgs() throws ArgsException {
+        Args arg = newInstance("b,i#,s*", new String[]{"-bis", "true", "12", "string1", "string2", "string3"});
+        assertTrue(arg.getBoolean('b'));
+        assertEquals(arg.getInt('i'), 12);
+        assertEquals(arg.getString('s'), "string1");
+    }
+
+    @Test
+    public void testMultiArgs_whenMoreFormatThanArgs() throws ArgsException {
+        Args arg = newInstance("b,i#,s*", new String[]{"-b", "true"});
+        assertTrue(arg.getBoolean('b'));
+        assertEquals(arg.getInt('i'), 0);
+        assertEquals(arg.getString('s'), "");
     }
 
     @Test
@@ -183,5 +215,10 @@ public class ArgsTest {
     @Test(expected = ArgsException.class)
     public void testMalformedFormat() throws ArgsException {
         newInstance("i#i#", new String[]{"-i", "12"});
+    }
+
+    @Test(expected = ArgsException.class)
+    public void testMalformedArgs() throws ArgsException {
+        newInstance("i#", new String[]{"i", "12"});
     }
 }
