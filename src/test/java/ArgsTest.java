@@ -49,6 +49,13 @@ public class ArgsTest {
     }
 
     @Test
+    public void testSingleArg_Boolean_whenRetrieveTwice() throws ArgsException {
+        Args arg = newInstance("b", new String[]{"-b", "true"});
+        assertTrue(arg.getBoolean('b'));
+        assertTrue(arg.getBoolean('b'));
+    }
+
+    @Test
     public void testSingleArg_Integer() throws ArgsException {
         Args arg = newInstance("i#", new String[]{"-i", "12"});
         assertEquals(arg.getInt('i'), 12);
@@ -128,8 +135,22 @@ public class ArgsTest {
     }
 
     @Test(expected = ArgsException.class)
-    public void testMultiArgs_whenStringArgIsMissing2() throws ArgsException {
+    public void testMultiArgs_whenStringArgIsMissing() throws ArgsException {
         newInstance("b,i#", new String[]{"-bis", "true", "12", "string"});
+    }
+
+    @Test
+    public void testMultiArgs_twoStrings() throws ArgsException {
+        Args arg = newInstance("s*,t*", new String[]{"-st", "string1", "string2"});
+        assertEquals(arg.getString('s'), "string1");
+        assertEquals(arg.getString('t'), "string2");
+    }
+
+    @Test
+    public void testMultiArgs_twoIntegers() throws ArgsException {
+        Args arg = newInstance("i#,j#", new String[]{"-ij", "11", "-99"});
+        assertEquals(arg.getInt('i'), 11);
+        assertEquals(arg.getInt('j'), -99);
     }
 
     @Ignore
