@@ -5,7 +5,7 @@ import base.ArgsException;
 
 public class ExampleArgs extends Args {
     public ExampleArgs(String schema, String[] args) throws ArgsException {
-        super(schema, args);
+//        super(schema, args);
     }
 
     @Override

@@ -1,8 +1,6 @@
 package base;
 
 public abstract class Args {
-    public Args(String schema, String[] args) throws ArgsException {
-    }
 
     public abstract boolean has(char arg);
 
